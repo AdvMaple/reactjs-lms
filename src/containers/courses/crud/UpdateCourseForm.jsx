@@ -13,9 +13,48 @@ import { useNavigate } from 'react-router-dom';
 
 const { RangePicker } = DatePicker
 
+const useAllTeacher = ({
+    isCallApiWhenInit = false
+}) => {
+    const [teacherList, setTeacherList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false)
+
+    const getAllTeachers = async (filter) => {
+        setIsLoading(true)
+        try {
+            const teachersResponse = await apiGetAllTeachers(filter);
+            const teachers = teachersResponse.data.map((sub) => ({
+                value: sub.id,
+                label: sub.full_name
+            }))
+            setTeacherList(teachers);
+        } catch (e) {
+            setIsError(true)
+        } finally {
+            setIsLoading(false)
+        }
+        
+    }
+
+    
+    useEffect(() => {
+        if (isCallApiWhenInit) {
+            getAllTeachers()
+        }
+        
+    }, [])
+
+    return {teacherList, setTeacherList, isLoading, getAllTeachers}
+}
+
 const UpdateCourseForm = ({ course }) => {
     const [subjectList, setSubjectList] = useState();
-    const [teacherList, setTeacherList] = useState();
+
+    const {teacherList, setTeacherList, isLoading: teacherLoading, getAllTeachers} = useAllTeacher({
+        isCallApiWhenInit: true
+    })
+
     const [courseTime, setCourseTime] = useState([]);
     const [isLoading, setIsLoading] = useState(false)
     const [form] = Form.useForm();
@@ -33,17 +72,8 @@ const UpdateCourseForm = ({ course }) => {
             }))
             setSubjectList(subjects);
         }
-        const getAllTeachers = async () => {
-            const teachersResponse = await apiGetAllTeachers();
-            console.log('Teachers: ' + JSON.stringify(teachersResponse.data));
-            const teachers = teachersResponse.data.map((sub) => ({
-                value: sub.id,
-                label: sub.full_name
-            }))
-            setTeacherList(teachers);
-        }
         getAllSubjects();
-        getAllTeachers();
+        getAllTeachers()
         return (() => console.log('Unmount'))
     }, [])
 
@@ -136,6 +166,7 @@ const UpdateCourseForm = ({ course }) => {
                 hasFeedback
                 label="Course Teacher"
                 name="teacher_id"
+                defaultValue={oldData.teacher}
             >
                 <Select
                     allowClear

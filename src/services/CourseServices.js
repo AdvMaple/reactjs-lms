@@ -1,6 +1,25 @@
 // import axios from "axios";
 import axios from "./customizeAxios";
 
+// TODO: rewrite as object input
+// const apiGetCourses = ({
+//     order = 'ASC',
+//     ...restObject
+// }) => {
+//     return axios.get('/course', {
+//         params: {
+//             order,
+//             page: restObject.page,
+//             take,
+//             name,
+//             start_at,
+//             end_at,
+//             teachers_id,
+//             subjects_id
+//         }
+//     });
+// }
+
 const apiGetCourses = (order = 'ASC', page = 1, take = 4, name, start_at, end_at, teachers_id, subjects_id) => {
     return axios.get('/course', {
         params: {

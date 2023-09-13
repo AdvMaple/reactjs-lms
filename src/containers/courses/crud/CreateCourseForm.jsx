@@ -195,9 +195,7 @@ const CreateCourseForm = ({ onClose, fetchCourses }) => {
             <Form.Item className='flex justify-end' >
                 <Space>
                     <Button
-                        onClick={() => {
-                            form.resetFields();
-                        }}
+                        onClick={form.resetFields}
                     >
                         Clear
                     </Button>

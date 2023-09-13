@@ -10,6 +10,15 @@ import LoginPage from './containers/login/LoginPage';
 import RequireAuth from './components/RequiredAuth';
 import CoursesManagement from './containers/courses/CoursesManagement';
 
+
+class AppRole {
+  ALL_ROLES = ['student', 'admin', 'teacher']
+  ADMIN_ONLY = ['admin']
+  isUserAllow(user, path) {
+    // ...
+  }
+}
+
 function App() {
 
   const location = useLocation();
@@ -24,7 +33,7 @@ function App() {
         <Container>
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route element={<RequireAuth allowedRoles={['student', 'admin', 'teacher']} />}>
+            <Route element={<RequireAuth allowedRoles={AppRole.ALL_ROLES} />}>
               <Route path='/courses' element={<Courses />} />
             </Route>
 
@@ -32,7 +41,7 @@ function App() {
             <Route path='/contact' element={<Contact />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/login' element={<LoginPage />} />
-            <Route element={<RequireAuth allowedRoles={['admin']} />}>
+            <Route element={<RequireAuth allowedRoles={AppRole.ADMIN_ONLY} />}>
               <Route path='/admin/courses' element={<CoursesManagement />} />
             </Route>
           </Routes>

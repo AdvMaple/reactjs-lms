@@ -165,8 +165,9 @@ const CoursesManagement = () => {
             } else {
                 message.error('Delete fail!');
             }
+            fetchCourses()
         }
-        showDeleteConfirm('Do you want to delete this course?', content, handleDelete, fetchCourses)
+        showDeleteConfirm('Do you want to delete this course?', content, handleDelete)
     }
 
     const data = courses?.map(course => (
